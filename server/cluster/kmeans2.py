@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# feature selection, TF-IDF on job filed
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
@@ -9,8 +12,7 @@ class KmeamsByText:
     def do_kmeans_cluster(cls, df):
         # delete duplication
         df.drop_duplicates('name', inplace=True)
-
-        # fetch data
+        # select needed data
         documents = df['job']
 
         # IF-IDF
@@ -28,11 +30,11 @@ class KmeamsByText:
         df_cluster_1 = df[df['label'] == 0]
         df_cluster_2 = df[df['label'] == 1]
         df_cluster_3 = df[df['label'] == 2]
-
         pointGroup = [df_cluster_1.values.tolist(),
                       df_cluster_2.values.tolist(),
                       df_cluster_3.values.tolist()]
 
+        # top ten terms for each cluster
         order_centroids = model.cluster_centers_.argsort()[:, ::-1]
         terms = vectorizer.get_feature_names()
         top_terms = []

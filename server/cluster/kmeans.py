@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+# feature selection, [the number of words used to describe current job, the number of connection]
+
 from sklearn.cluster import KMeans
 import pandas as pd
 import numpy as np
 
 
 class KmeansByNumber:
+    # pre-process the data, with extra feature for the future upgrade
     @classmethod
     def _clean_data(cls, df):
         # delete duplication
@@ -26,12 +29,12 @@ class KmeansByNumber:
         df['connection'] = df['connection'].replace('500+', '500')
 
         df2 = df.loc[0:, ['level', 'job_type_1', 'job_type_2', 'job_word_num', 'connection']]
-
         df2['level'] = df['level'].astype('int')
         df2['job_type_1'] = df['job_type_1'].astype('int')
         df2['job_type_2'] = df['job_type_2'].astype('int')
         return df2
 
+    # do k-means, only using two feature currently
     @classmethod
     def do_kmeans_cluster(cls, df):
         df = cls._clean_data(df)
@@ -44,12 +47,12 @@ class KmeansByNumber:
         label_pred = estimator.labels_
         centroids = estimator.cluster_centers_
 
-
         # center poitns
         df_center = pd.DataFrame(centroids)
+        # add group labels
         df['label'] = pd.Series(label_pred)
 
-
+        # process return date
         res = []
         for d in df_center.values.tolist():
             res.append({'group':'center_point','job':d[0],'connection':d[1]})

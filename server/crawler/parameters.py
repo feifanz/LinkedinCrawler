@@ -1,3 +1,6 @@
+# Basic parameters used for crawler
+
+
 # search query
 search_query = 'site:linkedin.com/in/ AND "developer" OR "designer"'
 
