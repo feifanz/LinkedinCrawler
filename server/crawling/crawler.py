@@ -9,7 +9,7 @@ from selenium.webdriver.common.keys import Keys
 from parsel import Selector
 import pandas as pd
 
-from parameters import search_query, linkedin_username, linkedin_password, driver_location
+from parameters import search_query, linkedin_username, linkedin_password, driver_location, linkedin_verify_code
 
 
 class CrawlingThread(threading.Thread):  # 继承父类threading.Thread
@@ -22,6 +22,8 @@ class CrawlingThread(threading.Thread):  # 继承父类threading.Thread
         self.search_query = search_query
         self.linkedin_username = linkedin_username
         self.linkedin_password = linkedin_password
+        self.driver_location = driver_location
+        self.linkedin_verify_code = linkedin_verify_code
         self.userList = []
 
     def __fetch_linkedin_url(self, driver, query, number):
@@ -41,6 +43,7 @@ class CrawlingThread(threading.Thread):  # 继承父类threading.Thread
         linkedin_urls.extend(map(lambda x: x.text.encode('utf-8'), urls))
 
         while len(linkedin_urls) < number:
+            print 'fetching url ...'
             if self.exitFlag:
                 self.driver.quit()
                 return linkedin_urls
@@ -62,6 +65,16 @@ class CrawlingThread(threading.Thread):  # 继承父类threading.Thread
         log_in_button = driver.find_element_by_xpath('//*[@type="submit"]')
         # .click() to mimic button click
         log_in_button.click()
+        if self.__check_linkedin_verify(driver):
+            driver.find_element_by_id('input__email_verification_pin').send_keys(self.linkedin_verify_code)
+            driver.find_element_by_id('email-pin-submit-button').click()
+
+    def __check_linkedin_verify(self, driver):
+        try:
+            driver.find_element_by_id('input__email_verification_pin')
+            return True
+        except:
+            return False
 
     def __validate_field(self, field):
         if field:
@@ -98,27 +111,35 @@ class CrawlingThread(threading.Thread):  # 继承父类threading.Thread
         ]
         return res
 
-    def __crawl(self, driver, linkedin_username, linkedin_password, search_query, csv_name='userinfo.csv', number=10):
+    def crawl(self, driver, linkedin_username, linkedin_password, search_query, csv_name='userinfo.csv', number=10):
         urls = self.__fetch_linkedin_url(driver, search_query, number)
         print 'fetch urls finished ---> totoal num: ' + str(len(urls))
-        self.__linkedin_login(driver, linkedin_username, linkedin_password)
-
+        self.__linkedin_login(driver, linkedin_username, linkedin_password);
+        if self.__check_linkedin_verify(driver):
+            print 'need verify by email...'
+            print 'please set linkedin_verify_code in parameters.py and restart crawler...'
         for url in urls:
             if self.exitFlag:
                 self.driver.quit()
-                df = pd.DataFrame(self.userList,columns=['name', 'level', 'job', 'location', 'connection', 'company', 'college', 'url'])
+                df = pd.DataFrame(self.userList,
+                                  columns=['name', 'level', 'job', 'location', 'connection', 'company', 'college',
+                                           'url'])
                 df.to_csv(csv_name, index=False, sep=',')
                 return
             else:
                 time.sleep(1)
                 try:
                     userinfo = self.__parse_linkedin_user(driver, url)
-                    self.userList.append(userinfo)
-                    print str(len(self.userList)) + ' parse success ! --->' + str(userinfo)
+                    if userinfo[0]:
+                        self.userList.append(userinfo)
+                        print str(len(self.userList)) + ' parse success ! --->' + str(userinfo)
+                    else:
+                        print 'invalid user info'
                 except Exception as e:
                     print 'parse userinfo failed !'
                     print e
-        df = pd.DataFrame(self.userList,columns=['name', 'level', 'job', 'location', 'connection', 'company', 'college','url'])
+        df = pd.DataFrame(self.userList,
+                          columns=['name', 'level', 'job', 'location', 'connection', 'company', 'college', 'url'])
         df.to_csv(csv_name, index=False, sep=',')
         print 'parse finished ! ===> totoal number: ' + str(len(self.userList))
 
@@ -126,11 +147,16 @@ class CrawlingThread(threading.Thread):  # 继承父类threading.Thread
         self.exitFlag = 1
 
     def run(self):
-        chrome_options = webdriver.chrome.options.Options()
+
+        chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
-        self.driver = webdriver.Chrome(driver_location, options=chrome_options)
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument(
+            "user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'")
+        self.driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=self.driver_location)
+
         print "Starting " + self.name
-        self.__crawl(self.driver, linkedin_username, linkedin_password, search_query, number=100,
+        self.crawl(self.driver, linkedin_username, linkedin_password, search_query, number=100,
                      csv_name='static/userinfo.csv')
         print "Exiting " + self.name
 
@@ -142,4 +168,3 @@ class CrawlingThread(threading.Thread):  # 继承父类threading.Thread
 
     def getUserList(self):
         return self.userList
-

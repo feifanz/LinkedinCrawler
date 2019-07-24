@@ -5,8 +5,10 @@ search_query = 'site:linkedin.com/in/ AND "developer" OR "designer"'
 file_name = 'results_file.csv'
 
 # login credentials
-linkedin_username = '*****'
-linkedin_password = '*****'
+linkedin_username = '1760593858@qq.com'
+linkedin_password = 'qwer1357'
+linkedin_verify_code = '*****'
 
 #chrome driver location
 driver_location = 'static/chromedriver'
+
