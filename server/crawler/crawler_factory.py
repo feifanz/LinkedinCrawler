@@ -67,12 +67,6 @@ class CrawlingThread(threading.Thread):
         log_in_button = driver.find_element_by_xpath('//*[@type="submit"]')
         log_in_button.click()
 
-        # check whether need account verification
-        if self.__check_linkedin_verify(driver):
-            # get verification code from parameters.py, should reset every time
-            driver.find_element_by_id('input__email_verification_pin').send_keys(self.linkedin_verify_code)
-            driver.find_element_by_id('email-pin-submit-button').click()
-
     # check whether need verification
     def __check_linkedin_verify(self, driver):
         try:
@@ -131,7 +125,7 @@ class CrawlingThread(threading.Thread):
         # if need to be verify, stop the process
         if self.__check_linkedin_verify(driver):
             print 'need verify by email...'
-            print 'please set linkedin_verify_code in parameters.py and restart crawler...'
+            print 'please run verify script and do verification'
             return
 
         # collect linkedin profile
