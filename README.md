@@ -9,7 +9,8 @@ LinkedinCrawler can automatically collect basic Linkedin profiles and perform cl
 Check http://20.36.38.226/ to see the lively demo.
 It provides demo data (100 user profile), you can also fetch your own data at Crawler page.
 
-# Crawler module, location -> '/LinkedinCrawler/server/crawler'
+# Crawler module
+locate at '/LinkedinCrawler/server/crawler'
 
 1. Set linkedin account and other parameters at 'parameters.py', default provide a test account
 2. Need Chrome browser installed
@@ -18,7 +19,8 @@ It provides demo data (100 user profile), you can also fetch your own data at Cr
 
 *notice Crawler may trigger the linkedin verification mechanism. To solve this problem, you can set your own account at        parameters.py, and run 'python /LinkedinCrawler/server/crawler/verify.py' to simulate the verification process, and restart the Crawler. If it still doesn't work, you need login the Linkedin account at browser, and pass the robotic test.
 
-# Cluster module, location -> '/LinkedinCrawler/server/cluster'
+# Cluster module, location 
+locate at '/LinkedinCrawler/server/cluster'
 1. Use k-means algorithm to cluster the data, there are two ways to choose features:
    - The number of job description, he number of connection
    - The text content of job description, use TF-IDF deal with it
