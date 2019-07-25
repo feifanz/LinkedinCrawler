@@ -17,7 +17,7 @@ locate at '/LinkedinCrawler/server/crawler'
 3. Need chromedriver(http://chromedriver.chromium.org/), there is one at '/LinkedinCrawler/server/static',replace it if the      current one doesn't work
 4. Run 'python LinkedinCrawler/server/test/test_crawler.py' to see how it works
 
-*notice Crawler may trigger the linkedin verification mechanism. To solve this problem, you can set your own account at        parameters.py, and run 'python /LinkedinCrawler/server/crawler/verify.py' to simulate the verification process, and restart the Crawler. If it still doesn't work, you need login the Linkedin account at browser, and pass the robotic test.
+*notice: Crawler may trigger the linkedin verification mechanism. To solve this problem, you can set your own account at        parameters.py, and run 'python /LinkedinCrawler/server/crawler/verify.py' to simulate the verification process, and restart the Crawler. If it still doesn't work, you need login the Linkedin account at browser, and pass the robotic test.
 
 # Cluster module, location 
 locate at '/LinkedinCrawler/server/cluster'
