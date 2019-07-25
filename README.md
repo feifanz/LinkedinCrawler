@@ -9,7 +9,7 @@ LinkedinCrawler can automatically collect basic Linkedin profiles and perform cl
 Check http://20.36.38.226/ to see the lively demo.
 It provides demo data (100 user profile), you can also fetch your own data at Crawler page.
 
-# Crawler module
+# How to test crawler module
 Location: '/LinkedinCrawler/server/crawler'
 As only for demo prupose, data will be saved at '/LinkedinCrawler/server/static/userinfo.csv', the old data will be cleaned before the new ones come in.
 
@@ -20,7 +20,7 @@ As only for demo prupose, data will be saved at '/LinkedinCrawler/server/static/
 
 *notice: Crawler may trigger the linkedin verification mechanism. To solve this problem, you can set your own account at        parameters.py, and run 'python /LinkedinCrawler/server/crawler/verify.py' to simulate the verification process, and restart the Crawler. If it still doesn't work, you need login the Linkedin account at browser, and pass the robotic test.
 
-# Cluster module 
+# How to test cluster module
 Location: '/LinkedinCrawler/server/cluster'
 '/LinkedinCrawler/server/static/userinfo_demo.csv' stores data used for cluster
 
@@ -30,7 +30,7 @@ Location: '/LinkedinCrawler/server/cluster'
 2. Run 'python LinkedinCrawler/server/test/test_cluster.py' to see how it works
 
 
-# How to run service locally
+# How to run services locally
 Front-end
 1) Make sure you have installed Node and npm
 2) Go into the 'LinkedinCrawler/client/linkedin-cluster' folder
@@ -50,7 +50,7 @@ Back-end
       scikit_learn==0.21.2
 3) Run 'python LinkedinCrawler/server/server.py', the server will running at  http://localhost:5000/
 
-# How to deploy this app on cloud
+# How to deploy services on cloud
 1. Connect to cloud VM
 2. Go into the 'LinkedinCrawler/client/linkedin-cluster' folder, run 'npm run build', 
    it will generate static files in build folder
