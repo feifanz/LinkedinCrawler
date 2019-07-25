@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import {Button, message, Card, Table} from 'antd';
+import {Button, message, Card, Table, Spin} from 'antd';
 
 export default class Crawler extends Component {
 
@@ -79,9 +79,15 @@ export default class Crawler extends Component {
                     }
                     message.success('crawler finished successfully');
                 } else {
-                    // server error
-                    message.success('error happens when check status');
+                    message.error('error happens when check status');
                 }
+            }).catch(error => {
+                console.log(error.response);
+                this.setState({isStart: false, statusMsg: ''});
+                if (this.state.timer) {
+                    clearInterval(this.state.timer);
+                }
+                message.error('error happens when check status');
             });
         };
         fetchStatus();
@@ -179,9 +185,10 @@ export default class Crawler extends Component {
             {!this.state.isStart &&
             <Button type='primary' onClick={this.onStart} style={{margin: 20}}>Start crawler</Button>}
             {this.state.isStart &&
-            <Button type='danger' onClick={this.onStop} style={{margin: 20}}>Stop crawler</Button>}
+            <Button type='danger' onClick={this.onStop} style={{margin: 20}} >Stop crawler</Button>}
             {this.state.statusMsg && <Card style={{width: 500, marginLeft: 20}}>
-                <p style={{fontSize: 19, fontWeight: 600}}>Monitor crawler status (updated every 2 seconds)</p>
+                <p style={{fontSize: 19, fontWeight: 600, display:'inline-block',marginRight:10}}>Monitor crawler status (updated every 2s)</p>
+                <Spin/>
                 <p style={{fontSize: 15}}>{this.state.statusMsg}</p>
             </Card>}
             <div style={{margin: 20}}>
