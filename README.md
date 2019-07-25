@@ -1,10 +1,10 @@
-# LinkedinCrawler
-LinkedinCrawler can automatically collect basic Linkedin profiles and perform cluster algorithm on them, contains:
+# LinkedinCrawler 
+LinkedinCrawler can automatically collect basic Linkedin profiles and perform cluster algorithm on them (*based on python2.7), contains:
    - Crawler module
    - Cluster module
    - Front-end based on react framework and ant design ui
    - Back-end restful service based on flask framework
-   *notice: base on python2.7
+  
 
 # Demo
 Check http://20.36.38.226/ to see the lively demo.
