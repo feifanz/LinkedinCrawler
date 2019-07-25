@@ -10,12 +10,13 @@ Check http://20.36.38.226/ to see the lively demo.
 It provides demo data (100 user profile), you can also fetch your own data at Crawler page.
 
 # How to test crawler module
-Location: '/LinkedinCrawler/server/crawler'
+Location: `/LinkedinCrawler/server/crawler`
 As only for demo prupose, data will be saved at '/LinkedinCrawler/server/static/userinfo.csv', the old data will be cleaned before the new ones come in.
 
 1. Set linkedin account and other parameters at 'parameters.py', default provide a test account
 2. Need Chrome browser installed
-3. Need chromedriver(http://chromedriver.chromium.org/), there is one at '/LinkedinCrawler/server/static',replace it if the      current one doesn't work
+3. Need chromedriver(http://chromedriver.chromium.org/), there is one at '/LinkedinCrawler/server/static', replace it if it 
+   doesn't work
 4. Run 'python LinkedinCrawler/server/test/test_crawler.py' to see how it works
 
 *notice: Crawler may trigger the linkedin verification mechanism. To solve this problem, you can set your own account at        parameters.py, and run 'python /LinkedinCrawler/server/crawler/verify.py' to simulate the verification process, and restart the Crawler. If it still doesn't work, you need login the Linkedin account at browser, and pass the robotic test.
