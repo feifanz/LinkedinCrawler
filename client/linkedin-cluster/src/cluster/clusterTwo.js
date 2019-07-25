@@ -100,6 +100,12 @@ export default class ClusterWne extends Component {
 
         return (
             <div>
+                <Card style={{margin: 20}}>
+                    <h4>Use K-means to cluster data</h4>
+                    <h4>use TF-IDF transfer the text of current job to numerical feature</h4>
+                    <h4>For easy to draw diagram, cluster into 3 groups:</h4>
+                    <h4>Also list top ten terms of each cluster</h4>
+                </Card>
                 <Button onClick={()=>this.fetchdata('userinfo_demo.csv')} style={{margin: 20}}>Generate by Demo
                     data</Button>
                 <Button onClick={()=>this.fetchdata('userinfo.csv')} style={{margin: 20}}>Generate by Fetched

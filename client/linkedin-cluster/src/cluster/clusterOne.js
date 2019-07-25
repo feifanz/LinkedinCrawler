@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import {Button, message, Table} from 'antd';
+import {Button, message, Table,Card} from 'antd';
 import {G2, Chart, Geom, Axis, Tooltip, Coord, Label, Legend, View, Guide, Shape, Facet, Util} from "bizcharts";
 export default class ClusterOne extends Component {
 
@@ -102,6 +102,12 @@ export default class ClusterOne extends Component {
         ];
         return (
             <div>
+                <Card style={{margin: 20}}>
+                    <h4>Use K-means to cluster data</h4>
+                    <h4>For easy to draw diagram, only select Two numerical features and cluster into 3 groups:</h4>
+                    <h4>1. the number of words used to describe the current job</h4>
+                    <h4>2. the number of connections (people with 500+ connection treated as 500 )</h4>
+                </Card>
                 <Button onClick={()=>this.fetchdata('userinfo_demo.csv')} style={{margin: 20}}>Generate by Demo data</Button>
                 <Button onClick={()=>this.fetchdata('userinfo.csv')} style={{margin: 20}}>Generate by Fetched data</Button>
                 <div>

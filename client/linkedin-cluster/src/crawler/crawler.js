@@ -12,11 +12,13 @@ export default class Crawler extends Component {
     };
 
     componentWillMount = ()=> {
-        axios.get('/api/crawling/status').then(res=> {
+        axios.get('/api/crawler/status').then(res=> {
             const {status, data} = res.data;
             if (status === 0 && data.runningFlag === true) {
                 this.setState({isStart: true});
                 this.statusTimer();
+            } else if(status === 1) {
+                message.error('error happens when check status');
             }
         });
 
@@ -30,36 +32,37 @@ export default class Crawler extends Component {
 
     onStart = ()=> {
         this.setState({userList: []});
-        axios.get('/api/crawling/start').then(res=> {
+        axios.get('/api/crawler/start').then(res=> {
             if (res.data.status === 0) {
-                message.success('start crawling successfully');
+                message.success('start crawler successfully');
                 this.setState({isStart: true});
                 this.statusTimer();
             } else {
-                message.error('start crawling failed');
+                message.error('error happens when start');
             }
         })
     };
 
     onStop = ()=> {
-        axios.get('/api/crawling/stop').then(res=> {
+        axios.get('/api/crawler/stop').then(res=> {
             if (res.data.status === 0) {
-                message.success('stop crawling successfully');
+                message.success('stop crawler successfully');
                 this.setState({isStart: false, statusMsg: ''});
                 clearInterval(this.state.timer);
             } else {
-                message.error('stop crawling failed');
+                message.error('error happens when stop');
             }
         })
     };
 
     statusTimer = ()=> {
         const fetchStatus = ()=> {
-            axios.get('/api/crawling/status').then(res=> {
-                const {data} = res.data;
-                if (data.runningFlag) {
-                    if (data.number < 1) {
-                        this.setState({statusMsg: 'Crawler is fetching linkedin profile urls from google...'})
+            axios.get('/api/crawler/status').then(res=> {
+                const {status, data} = res.data;
+                if (status === 0 && data.runningFlag) {
+                    //crawler is running
+                    if (data.userList.length < 1) {
+                        this.setState({statusMsg: 'Crawler is fetching profile url from google...'})
                     }
                     else {
                         this.setState({
@@ -68,6 +71,16 @@ export default class Crawler extends Component {
                         })
 
                     }
+                } else if (status === 0 && !data.runningFlag) {
+                    //crawler is finished
+                    this.setState({isStart: false, statusMsg: ''});
+                    if (this.state.timer) {
+                        clearInterval(this.state.timer);
+                    }
+                    message.success('crawler finished successfully');
+                } else {
+                    // server error
+                    message.success('error happens when check status');
                 }
             });
         };
@@ -159,6 +172,10 @@ export default class Crawler extends Component {
             },
         ];
         return (<div>
+            <Card style={{margin: 20}}>
+                <h4>For demo purpose, Crawl up to 100 profiles with key words 'developer' or 'designer'</h4>
+                <h4>Only store the latest data, will clean the old data every time</h4>
+            </Card>
             {!this.state.isStart &&
             <Button type='primary' onClick={this.onStart} style={{margin: 20}}>Start crawler</Button>}
             {this.state.isStart &&
