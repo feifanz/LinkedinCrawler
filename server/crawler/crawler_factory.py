@@ -7,7 +7,7 @@ from selenium.webdriver.common.keys import Keys
 from parsel import Selector
 import pandas as pd
 
-from parameters import search_query, linkedin_username, linkedin_password, driver_location, linkedin_verify_code
+from parameters import search_query, linkedin_username, linkedin_password, driver_location
 
 
 class CrawlingThread(threading.Thread):
@@ -21,7 +21,6 @@ class CrawlingThread(threading.Thread):
         self.linkedin_username = linkedin_username
         self.linkedin_password = linkedin_password
         self.driver_location = driver_location
-        self.linkedin_verify_code = linkedin_verify_code
         self.userList = []
 
     # collect linkedin profile urls from www.google.com
